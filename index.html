@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Can you find the right numbers to reach the target? Almost every number can be constructed as a sum of unique squares, but finding the right combination is easier said than done. Share the puzzle with your friends, and see who's smarter.">
-  <!-- This concept is mine, based on a conversation I had with a friend, but the code is AI generated. - Ronik Bhaskar -->
+  <!-- This concept is mine, based on a conversation I had with a friend, but the code is mostly AI generated with a few human fixes. - Ronik Bhaskar -->
   <title>Sum of Squares</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
@@ -156,6 +156,10 @@
     const sumEl = document.getElementById('sum');
     const gridEl = document.getElementById('grid');
     const containerEl = document.getElementById('container');
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const audioCtx = new AudioContext();
+    const buttonClickSound = new Audio('select-mixkit.wav', preload="auto");
+    const winSound = new Audio('win-mixkit.wav', preload="auto");
 
     targetEl.textContent = TARGET;
 
@@ -176,6 +180,8 @@
         });
 
         setTimeout(() => containerEl.classList.remove('shake'), 400);
+        winSound.play();
+        navigator.vibrate(200);
       }
 
       if (currentSum !== TARGET) {
@@ -194,6 +200,8 @@
 
       btn.addEventListener('click', () => {
         const value = i * i;
+        buttonClickSound.currentTime = 0;
+        buttonClickSound.play();
 
         if (btn.classList.contains('selected')) {
           btn.classList.remove('selected');
@@ -211,6 +219,8 @@
 
     const shareBtn = document.getElementById('shareBtn');
     shareBtn.addEventListener('click', async () => {
+      buttonClickSound.currentTime = 0;
+      buttonClickSound.play();
       const url = `${window.location.origin}${window.location.pathname}?target=${TARGET}`;
       try {
         await navigator.clipboard.writeText(url);
